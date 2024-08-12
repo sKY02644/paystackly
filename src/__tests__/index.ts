@@ -5,8 +5,13 @@ import { describe, it } from "mocha";
 import { expect } from "chai";
 import { PayStack } from "../core";
 const { PAYSTACK_SK = "" } = process.env;
+
+PayStack.initialize(PAYSTACK_SK);
+
 describe("Paystack class", () => {
-  const paystack = new PayStack(PAYSTACK_SK);
+
+  const paystack = PayStack.getInstance()
+
   it("should return true if Paystack is a class", () => {
     expect(paystack).to.be.an.instanceof(PayStack);
   });

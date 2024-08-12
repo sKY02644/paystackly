@@ -73,7 +73,10 @@ export class PayStack extends PaystackBase {
   readonly dedicatedVirtualAccount: DedicatedVirtualAccount;
   [key: string]: PaystackInstance;
 
-  constructor(token: string) {
+  // Singleton instance
+  private static instance: PayStack | null = null;
+
+  private constructor(token: string) {
     super();
 
     Http.setAuthorization(token);
@@ -81,5 +84,20 @@ export class PayStack extends PaystackBase {
       const className = transformToCamelCase(baseClass.name);
       this[className] = new baseClass();
     }
+  }
+
+   // Public method to initialize the singleton with the API token
+  public static initialize(token: string): void {
+    if (!PayStack.instance) {
+      PayStack.instance = new PayStack(token);
+    }
+  }
+
+  // Public method to get the singleton instance
+  public static getInstance(): PayStack {
+    if (!PayStack.instance) {
+      throw new Error("PayStack is not initialized. Call initialize(token) first.");
+    }
+    return PayStack.instance;
   }
 }
